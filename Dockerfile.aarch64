@@ -2,6 +2,8 @@ FROM multiarch/alpine:aarch64-edge
 
 ENV TZ=Asia/Shanghai
 
+COPY qemu-aarch64-static /usr/bin/
+
 RUN set -eux; \
 	#sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories; \
 	apk --no-cache --no-progress upgrade; \
@@ -18,6 +20,13 @@ RUN set -eux; \
         mv BaiduPCS-Go-${new_ver}-linux-arm64/BaiduPCS-Go /usr/local/bin; \
 	rm -rf BaiduPCS-Go-${new_ver}-linux-arm64*; \
 	chmod +x /usr/local/bin/BaiduPCS-Go
+
+VOLUME /root/Downloads
+
+RUN set -ex; \
+	\
+	rm /usr/bin/qemu-aarch64-static
+
 
 EXPOSE 5299
 CMD ["/usr/local/bin/BaiduPCS-Go"]
